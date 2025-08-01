@@ -19,7 +19,7 @@ RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
 # Run Composer install
-RUN composer install --no-dev --prefer-dist
+RUN composer update --no-dev --prefer-dist
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
