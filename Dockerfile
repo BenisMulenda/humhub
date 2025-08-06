@@ -44,5 +44,6 @@ RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # ✅ Run setup ONLY if dynamic.php (config) doesn't exist
-CMD ["apache2-foreground"]
+CMD php protected/yii migrate/up --interactive=0
+
 
