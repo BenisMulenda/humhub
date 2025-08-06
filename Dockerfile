@@ -18,17 +18,15 @@ COPY . /var/www/html
 RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
-# Install PHP dependencies (ignoring platform issues)
+# Install PHP dependencies
 RUN composer install --no-dev --prefer-dist --ignore-platform-reqs
 
-# ✅ These two lines fix your 502 — must be present
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+# ✅ Rewrite Apache config to use Railway's dynamic $PORT
+RUN sed -i "s/80/\${PORT}/g" /etc/apache2/ports.conf && \
+    sed -i "s/:80/:${PORT}/g" /etc/apache2/sites-available/000-default.conf
 
 # Fix permissions
 RUN chown -R www-data:www-data /var/www/html
-
-EXPOSE 80
 
 # Start Apache
 CMD ["apache2-foreground"]
