@@ -13,19 +13,6 @@ return [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'formatter' => [
-            'class' => 'yii\i18n\Formatter',
-            'defaultTimeZone' => 'UTC',
-            'timeZone' => 'UTC',
-        ],
-        'log' => [
-            'targets' => [
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
-                ],
-            ],
-        ],
     ],
     'params' => [
         'installed' => true,
