@@ -1,6 +1,6 @@
 FROM php:8.1-apache
 
-# Install dependencies and PHP extensions
+# Install system packages and PHP extensions
 RUN apt-get update && apt-get install -y \
     unzip \
     git \
@@ -20,26 +20,26 @@ RUN a2enmod rewrite
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy code
+# Copy project files
 COPY . .
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
-# Install PHP dependencies
+# Install PHP dependencies (ignoring platform requirements)
 RUN composer install --no-dev --prefer-dist --ignore-platform-reqs || true
 
-# Permissions
+# Fix file permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Suppress ServerName warning
+# Suppress Apache FQDN warning
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Copy custom entrypoint
+# Add runtime script to dynamically configure Apache port
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-# Use custom entrypoint that updates ports dynamically
+# Use entrypoint + run migrations before Apache starts
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD php yii migrate/up --interactive=0 && apache2-foreground
