@@ -1,12 +1,18 @@
 #!/bin/bash
 
-# Bind dynamic Railway port only if PORT is a valid number
-if [[ "$PORT" =~ ^[0-9]+$ ]]; then
-  echo "Using PORT: $PORT"
-  sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
-  sed -i "s/:80/:${PORT}/" /etc/apache2/sites-enabled/000-default.conf
-else
-  echo "Warning: PORT variable is invalid or not set. Using default port 80."
-fi
+# Bind to dynamic Railway port
+export PORT=${PORT:-80}
+sed -i "s/80/${PORT}/g" /etc/apache2/ports.conf
+sed -i "s/:80/:${PORT}/g" /etc/apache2/sites-enabled/000-default.conf
 
-exec "$@"
+# Start cron task loop in the background
+(
+  while true; do
+    /var/www/html/protected/yii queue/run >/dev/null 2>&1
+    /var/www/html/protected/yii cron/run >/dev/null 2>&1
+    sleep 60
+  done
+) &
+
+# Start Apache
+exec apache2-foreground
