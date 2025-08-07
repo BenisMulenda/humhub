@@ -44,7 +44,8 @@ RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # ✅ Run setup ONLY if dynamic.php (config) doesn't exist
-CMD ["/bin/bash", "-c", "php protected/yii installer/setup --interactive=0 && apache2-foreground"]
+CMD ["apache2-foreground"]
+
 
 
 
