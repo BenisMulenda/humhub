@@ -9,15 +9,23 @@ RUN apt-get update && apt-get install -y \
 
 RUN a2enmod rewrite
 
+# Optional: suppress server name warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Set working directory
 WORKDIR /var/www/html
 
+# Copy source code
 COPY . /var/www/html
 
+# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
+# Install dependencies
 RUN composer install --no-dev --prefer-dist --ignore-platform-reqs
 
+# Set correct permissions
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
