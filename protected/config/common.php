@@ -17,8 +17,4 @@ return [
     'params' => [
         'installed' => false,
     ],
-    'urlManager' => [
-'showScriptName' => false,
-'enablePrettyUrl' => true
-],
 ];
