@@ -15,6 +15,6 @@ return [
         ],
     ],
     'params' => [
-        'installed' => false,
+        'installed' => true,
     ],
 ];
