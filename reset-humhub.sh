@@ -9,7 +9,7 @@ RUNTIME_DIR="$HUMHUB_DIR/protected/runtime"
 MYSQL_HOST="mysql.railway.internal"
 MYSQL_PORT=3306
 MYSQL_USER="root"
-MYSQL_PASS="your_mysql_password_here"
+MYSQL_PASS="lSoURHxcpAdLGYWwVwfWHouNFkXGzemS"
 MYSQL_DB="railway"
 
 echo "🧼 Resetting HumHub installation..."
